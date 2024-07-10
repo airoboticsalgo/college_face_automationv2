@@ -11,4 +11,3 @@ opencv-python==4.10.0.84
 pillow==10.4.0
 mtcnn==0.1.1
 retina-face==0.0.17
-tf-keras==2.16.0

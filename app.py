@@ -4,16 +4,22 @@ from face import fileoperation
 from face import faceoperation
 import os
 app = Flask(__name__)
+from face.core.commons import logger as log
 
+logger = log.get_singletonish_logger()
 db="E:/python_workspace/face_deepface1/dataset551"   
 dataset="dataset"
 @app.route("/faceapi/record/validation", methods=['PUT'])
 def record_validation():
+     logger.info("/faceapi/record/validation=== start") 
      devicename = request.args.get('devicename')
+     
+     logger.info(f"api={request.url}") 
      devicedb=os.getcwd()
      devicedb=f"{devicedb}/{dataset}/{devicename}/"
     #    if not os.path.exists(final_directory):
      print("devicedb=",devicedb)
+     
      print("devicename1=",os.path.exists(devicedb))
      id=""
      status="failed"
@@ -30,17 +36,20 @@ def record_validation():
         status, id=faceoperation.finderoneface(devicename,filename)
         print("id=",id)
         print("status=",status)
-        if os.path.exists(filename): os.remove(filename)
+        fileoperation.removefile(filename)
+      #   if os.path.exists(filename): os.remove(filename)
      reponse = {
             "id": id,
              "status": status
                 }
-
-     
+     logger.info(f"response==={reponse}") 
+     logger.info("/faceapi/record/validation=== end") 
 
      return reponse
-@app.route("/faceapi/record/create", methods=['PUT'])
+@app.route("/faceapi/record/create", methods=['POST'])
 def record_create():
+    logger.info("/faceapi/record/create=== start") 
+    logger.info(f"api={request.url}")
     devicename = request.args.get('devicename')
     recordname = request.args.get('recordname')
     # devicename = request.args.get('devicename')
@@ -58,7 +67,9 @@ def record_create():
     else:         
         status,filetemppath,orgfilename=fileoperation.dosavetemp(request)
 
-
+        logger.info(f"filesaved status={status}")
+        logger.info(f"filesaved filetemppath={filetemppath}")
+        logger.info(f"filesaved orgfilename={orgfilename}")
         print("status=",status)
         print("filename=",filetemppath)
         print("orgfilename=",orgfilename)
@@ -67,9 +78,13 @@ def record_create():
             "id": id,
              "status": status
                 }
+    logger.info(f"reponse==={reponse}") 
+    logger.info("/faceapi/record/create=== end") 
     return reponse
 @app.route("/faceapi/record/delete", methods=['DELETE'])
 def record_delete():
+    logger.info("/faceapi/record/delete=== start")
+    logger.info(f"api={request.url}") 
     devicename = request.args.get('devicename')
     recordname = request.args.get('recordname')
     # devicename = request.args.get('devicename')
@@ -92,6 +107,8 @@ def record_delete():
             "id": id,
              "status": status
                 }
+    logger.info(f"reponse==={reponse}") 
+    logger.info("/faceapi/record/delete=== end") 
     return reponse
 
 

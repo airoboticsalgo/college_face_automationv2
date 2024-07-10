@@ -7,13 +7,17 @@ import re
 import pandas as pd
 import random
 import shutil
+from face.core.commons import logger as log
+
+logger = log.get_singletonish_logger()
 ALLOWED_EXTENSIONS = {'jpg'}
 temp="temp"
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+def removefile(filename):
+    if os.path.exists(filename): os.remove(filename)
 
 def deletedir(dir):
     try:
@@ -95,8 +99,9 @@ def getfilenamebypath(finder):
     print("finder len=",len(finder))
 
     data =pd.DataFrame(finder[0])
-    print("data=",data)
-    emptydata=data.to_numpy()
+    print("finder data=",data)
+    logger.info(f"finder data={data}")
+    # emptydata=data.to_numpy()
     print("emptydata=",data.empty)
     if data.empty:
         return status,error1
@@ -115,10 +120,11 @@ def getfilenamebypath(finder):
     #  k+=1
     status="success"
     print("fullpath=",fullpath)
+    logger.info(f"fullpath={fullpath}")
     basefilename = Path(fullpath).stem
 
-    print("basefilename=",basefilename)
-   
+    print("recordname=",basefilename)
+    logger.info(f"recordname={basefilename}")
 
     # print("finder value11 =",str(finder[0]).strip())
     # finalname=str(finder[0])

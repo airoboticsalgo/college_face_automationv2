@@ -1,9 +1,37 @@
 import os
 import logging
 from datetime import datetime
-
+from logging.handlers import RotatingFileHandler
+# from face import fileoperation
 # pylint: disable=broad-except
+def createdir(path):
+    current_directory = os.getcwd()
+    final_directory = os.path.join(current_directory, path)
+    if not os.path.exists(final_directory):
+     os.makedirs(final_directory)
+    return
+
 class Logger:
+    cpath=os.getcwd()
+    logpath=f"{cpath}/logs"
+    createdir(logpath)
+    fullpathfile=f"{logpath}/trace.log"
+    rfh = logging.handlers.RotatingFileHandler(
+    filename=fullpathfile, 
+    mode='a',
+    maxBytes=10*1024*1024,
+    backupCount=10,
+    encoding=None,
+    delay=0
+)
+
+    # logging.basicConfig(filemode='a',filename=fullpathfile,filename="e:/trace.log",
+    #                 format='%(asctime)s %(message)s',
+    #                 filemode='w')
+    # filename=fullpathfile,
+    logging.basicConfig(level=logging.DEBUG,handlers=[rfh],
+                    format='%(threadName)s: %(asctime)s - %(levelname)s- %(funcName)s(%(lineno)d)- %(message)s')
+    
     def __init__(self, module=None):
         self.module = module
         log_level = os.environ.get("DEEPFACE_LOG_LEVEL", str(logging.INFO))
@@ -50,5 +78,20 @@ def get_singletonish_logger():
 
     if "logger" not in model_obj.keys():
         model_obj["logger"] = Logger(module="Singleton")
+        
+    # cpath=os.getcwd()
+    # logpath=f"{cpath}/logs"
+    # createdir(logpath)
+    # fullpathfile=f"{logpath}/trace.log"
+    # log_formatter = logging.Formatter('%(threadName)s: %(asctime)s - %(levelname)s %(funcName)s(%(lineno)d)- %(message)s')
 
-    return model_obj["logger"]
+# logFile = 'C:\\Temp\\log'
+
+
+    # my_handler = RotatingFileHandler(fullpathfile, mode='a', maxBytes=5*1024*1024, 
+    #                              backupCount=20, encoding=None, delay=0)
+    # my_handler.setFormatter(log_formatter)
+    
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    return logger

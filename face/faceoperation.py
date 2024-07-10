@@ -1,6 +1,9 @@
 from face.core import Face
 from . import fileoperation
 import os
+from face.core.commons import logger as log
+
+logger = log.get_singletonish_logger()
 db_path1="E:/python_workspace/face_deepface1/dataset551"
 db_path1="E:/python_workspace/face_deepface1/dataset"
 dataset="dataset"
@@ -16,6 +19,7 @@ def finderoneface(devicename,img_path1):
         except:
             face_objs=[]
             # print("Total face=0")
+        logger.info(f"Total face={len(face_objs)}")
 
         print("Total face=",len(face_objs))
         if len(face_objs)==0 :
@@ -51,9 +55,12 @@ def recordcreate(devicename,recordname,filetemppathname,orgfilename):
             # print("Total face=0")
 
     print("Total face=",len(face_objs))
+    logger.info(f"Total face=={len(face_objs)}")
     if len(face_objs)==0 :
+            # fileoperation.removefile(filetemppathname)
             return status, error2
     elif len(face_objs)>=2 :
+            # fileoperation.removefile(filetemppathname)
             return status, error3
     current_directory = os.getcwd()
         
