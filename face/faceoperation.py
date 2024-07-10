@@ -57,10 +57,10 @@ def recordcreate(devicename,recordname,filetemppathname,orgfilename):
     print("Total face=",len(face_objs))
     logger.info(f"Total face=={len(face_objs)}")
     if len(face_objs)==0 :
-            # fileoperation.removefile(filetemppathname)
+            fileoperation.removefile(filetemppathname)
             return status, error2
     elif len(face_objs)>=2 :
-            # fileoperation.removefile(filetemppathname)
+            fileoperation.removefile(filetemppathname)
             return status, error3
     current_directory = os.getcwd()
         
